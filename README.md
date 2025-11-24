@@ -101,7 +101,7 @@ You simply need to run the **eval_models.py** to test all the models.
 python eval_models.py
 ```
 This generates:
-*Test accuracy for every model
-*Confusion matrices (confmat_<model>.png)
-*accuracies_bar.png
-*summary.txt
+* Test accuracy for every model
+* Confusion matrices (confmat_<model>.png)
+* accuracies_bar.png
+* summary.txt
