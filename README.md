@@ -75,6 +75,9 @@ All the codes would also run if you do not have CUDA integration. It would inste
 ### 2. Prepare the Dataset
 
 Simply run the provided **create_dataset.py** to automatically split, and organize the EuroSAT dataset into the required `train`, `val`, and `test` folders.
+```bash
+python create_dataset.py
+```
 You may need to specify the location of the downloaded dataset in the code. Also, we have excluded the analysis of multispectral images (folder named **all bands**), so you exclude that too.
 
 ### 3. Training a Model
@@ -94,14 +97,64 @@ python train.py
     --save_dir checkpoints/resnet50_adamw
 ```
 Run this command on your VScode Terminal to start with the training of individual models.
+This would save the following in **modelname_adamw** folder in **checkpoints**:
+* Training and Validation Loss per epoch curve
+* Training and Validation Accuracy per epoch curve
+* Best model achieved stored as **best_modelname.pth**
+* Models after 5,10,15,20 epochs respectively
 
 ### 4. Evaluating All 6 Models
 You simply need to run the **eval_models.py** to test all the models.
 ```bash
 python eval_models.py
 ```
-This generates:
+This generates the following which is stored in **eval_results** folder in **checkpoints**:
 * Test accuracy for every model
 * Confusion matrices (confmat_<model>.png)
 * accuracies_bar.png
 * summary.txt
+
+### 5. Robustness Testing (Noise, Blur, Brightness, Occlusion)
+
+The `robustness_test.py` script performs extensive stress-testing on all 6 models to evaluate their performance under common image corruptions.
+
+```bash
+python robustness_test.py
+```
+This performs extensive stress-testing of all 6 models across:
+* Gaussian Noise
+* Gaussian Blur
+* Brightness Change
+* Occlusion
+
+Outputs stored automatically in **robustness_results** folder in **checkpoints**:
+* CSV accuracy logs
+* Combined robustness plot
+* summary_robust.txt
+
+---
+
+## 📊 Final Outputs Generated
+All generated results are used for the accompanying IEEE-style project report:
+
+* Training and Validation curves for each model
+* Test accuracy comparison
+* Robustness performance graphs 
+* Confusion matrices
+* Comprehensive summaries for:
+    * Parameter counts
+    * Training time
+    * Final accuracy
+    * Robustness ranking
+
+---
+
+## ✅ Conclusion
+This project successfully demonstrates:
+
+* How different **Deep CNN architectures** perform on the specialized task of satellite image classification.
+* Their **robustness** under simulated real-world conditions (noise, blur etc.).
+* The crucial **trade-offs** between accuracy, inference speed, and model size.
+
+> **Key Findings:**
+> **ResNet-50** showed the strongest overall accuracy and robustness performance, while **ResNet18** was the fastest and most lightweight model.
