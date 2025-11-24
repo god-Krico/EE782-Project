@@ -72,7 +72,7 @@ pip install torch torchvision timm matplotlib scikit-learn tqdm pillow tensorboa
 ```
 All the codes would also run if you do not have CUDA integration. It would instead use the CPU but would take longer to train.
 
-You are also required to save all the codes in the same folder as where you downloaded the EuroSAT dataset which is available on [Kaggle](https://www.kaggle.com/datasets/apollo2506/eurosat-dataset)
+You are also required to save all the codes which we have provided in this repo in the same folder as where you downloaded the EuroSAT dataset which is available on [Kaggle](https://www.kaggle.com/datasets/apollo2506/eurosat-dataset)
 
 
 ### 2. Prepare the Dataset
