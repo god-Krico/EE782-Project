@@ -1,212 +1,95 @@
-🌍 EE782 – EuroSAT Classification Using CNN Architectures
+# 🛰️ EE782 – Assignment 2: Satellite Image Classification using Deep CNNs
 
-This project implements and compares six state-of-the-art deep CNN architectures on the EuroSAT Remote Sensing Dataset using PyTorch.
-The work includes training, evaluation, robustness testing, confusion matrices, and performance comparison to determine the most reliable model for satellite image classification.
+## 👨‍💻 Group Members
+This project was completed by:
 
-🚀 Models Implemented
+* **Karan Satarkar** – 23B0708
+* **Ashwin Mankar** – 23B0726
 
-We evaluate two models from each family:
+---
 
-ResNet Family
+## ✨ Project Overview
+This assignment focuses on building an AI system that can accurately classify remote-sensing satellite images from the **EuroSAT dataset** into 10 different land-use categories.
 
-resnet18
+We thoroughly evaluated the performance and robustness of six state-of-the-art deep learning architectures across three model families:
 
-resnet50
+* **ResNet Family:** **ResNet18**, **ResNet50**
+* **DenseNet Family:** **DenseNet121**, **DenseNet201**
+* **EfficientNet Family:** **EfficientNet-B0**, **EfficientNet-B4**
 
-DenseNet Family
+Each model was trained, evaluated, and stress-tested for robustness using the **PyTorch** framework.
 
-densenet121
+---
 
-densenet201
+## 📦 Core Libraries & Dependencies
+The following core libraries were used for this project:
 
-EfficientNet Family
+| Library | Purpose |
+| :--- | :--- |
+| **PyTorch** (`torch`, `torchvision`) | Core framework for model training, evaluation, and GPU acceleration. |
+| **timm** (`PyTorch Image Models`) | Provides highly optimized implementations of **ResNet**, **DenseNet**, and **EfficientNet** architectures. |
+| **scikit-learn** (`sklearn`) | Used for generating confusion matrices and calculating performance metrics. |
+| **matplotlib** | For generating visual plots (accuracy/loss curves, robustness graphs). |
+| **numpy** | Core library for numerical and array processing. |
+| **tqdm** | Provides elegant progress bars during training and evaluation loops. |
+| **Pillow** (`PIL`) | Used for image loading and applying various corruptions (blur, noise, fog) for robustness testing. |
 
-efficientnet_b0
+---
 
-efficientnet_b4
+## 🌍 Dataset Used: EuroSAT
+We use the **EuroSAT RGB dataset** derived from Sentinel-2 satellite images. It consists of 10 distinct land-use categories:
 
-These 6 models form the baseline set for all experiments.
+* **AnnualCrop**
+* **Forest**
+* **HerbaceousVegetation**
+* **Highway**
+* **Industrial**
+* **Pasture**
+* **PermanentCrop**
+* **Residential**
+* **River**
+* **SeaLake**
 
-📂 Project Structure
-EE782-Project/
-│
-├── train.py                     # Training script (saves best weights & summary)
-├── models.py                    # Model factory for all 6 architectures
-├── datasets.py                  # Dataloader + augmentations
-├── eval_models.py               # Test accuracy + confusion matrices
-├── robustness_test.py           # Robustness testing (noise, blur, fog, contrast, occlusion)
-│
-├── checkpoints/
-│   ├── <model>_adamw/
-│   │     ├── best_<model>.pth
-│   │     ├── loss_curve_<model>.png
-│   │     ├── acc_curve_<model>.png
-│   │     ├── summary.txt
-│   │     └── confusionmatrix_robust/
-│   │           ├── confmat_<corruption>_sevX.png
-│   │           ├── confmat_<corruption>_sevX_norm.png
-│
-│   └── robustness_results/
-│         ├── accuracies_<corruption>.csv
-│         ├── accuracies_<corruption>.png
-│         ├── accuracies_all_corruptions.png
-│         └── summary_robust.txt
-│
-├── dataset/                     # Train / Val / Test folders (after split)
-└── README.md
+The dataset is automatically split for training and testing purposes:
+* **70%** — Train
+* **15%** — Validation
+* **15%** — Test
 
-📦 Dataset
+---
 
-The project uses the EuroSAT RGB dataset (10 classes):
+## 🚀 How to Run the Project
 
-AnnualCrop
+### 1. Install Dependencies
+It is highly recommended to use a Conda environment for GPU compatibility.
 
-Forest
-
-HerbaceousVegetation
-
-Highway
-
-Industrial
-
-Pasture
-
-PermanentCrop
-
-Residential
-
-River
-
-SeaLake
-
-Dataset splitting:
-
-70% Train
-15% Validation
-15% Test
-
-🔧 Environment Setup
+```bash
+# Create and activate a new environment
 conda create -n pytorch_gpu python=3.10
 conda activate pytorch_gpu
 
-pip install torch torchvision timm matplotlib scikit-learn tqdm tensorboard
+# Install all necessary packages
+pip install torch torchvision timm matplotlib scikit-learn tqdm pillow tensorboard
+```
 
+### 2. Prepare the Dataset
 
-Ensure CUDA is working:
+Simply run the provided **create_dataset.py** to automatically split, and organize the EuroSAT dataset into the required `train`, `val`, and `test` folders.
+You may need to specify the location of the downloaded dataset in the code. Also, we have excluded the analysis of multispectral images (folder named **all bands**), so you exclude that too.
 
-import torch
-print(torch.cuda.is_available())
+### 3. Training a Model
+Use the `train.py` script with arguments to specify the model and training parameters.
 
-🏋️ Training
+**Example Command (Training ResNet50):**
 
-Each model is trained individually using:
-
-python train.py \
-  --model resnet50 \
-  --pretrained \
-  --epochs 20 \
-  --batch_size 64 \
-  --lr 1e-3 \
-  --optimizer adamw \
-  --scheduler cosine \
-  --img_size 64 \
-  --save_dir checkpoints/resnet50_adamw
-
-
-Training outputs:
-
-best_<model>.pth
-
-loss & accuracy curves
-
-training summary (time, parameters, best acc)
-
-📊 Testing + Confusion Matrix
-
-To evaluate best checkpoints on the test set:
-
-python eval_models.py
-
-
-Outputs:
-
-Test accuracy for each model
-
-Confusion matrices
-
-accuracies_bar.png
-
-summary.txt
-
-🧪 Robustness Testing
-
-We test all 6 models against six corruption types:
-
-✔ Gaussian Noise
-✔ Gaussian Blur
-✔ Brightness Changes
-✔ Contrast Changes
-✔ Occlusion
-✔ Fog / Haze
-
-Run:
-
-python robustness_test.py
-
-
-Outputs:
-
-CSV files with accuracies per severity
-
-Plots for each corruption
-
-Combined plot of all corruptions
-
-Confusion matrices saved per model
-
-summary_robust.txt with rankings and averages
-
-📈 What This Project Provides
-
-Standard accuracy comparison (train/val/test)
-
-Deep robustness evaluation
-
-Per-severity breakdown across all models
-
-Confusion matrices (clean + corrupted inputs)
-
-Training curves and summaries
-
-Parameter count and training speed logs
-
-Perfect for an IEEE-style paper, including:
-
-tables
-
-plots
-
-robustness analysis
-
-model comparison
-
-recommendations
-
-🧠 Which Model is Best?
-
-Based on accuracy, robustness, and efficiency, conclusions can be drawn by analyzing:
-
-summary.txt
-
-summary_robust.txt
-
-All generated plots
-
-Typically:
-
-EfficientNet-B4 is strongest overall
-
-DenseNet121 offers best trade-off
-
-ResNet18 is fastest and smallest
-—but your results will provide concrete evidence.
+```bash
+python train.py 
+    --model resnet50 
+    --pretrained 
+    --epochs 20 
+    --batch_size 64 
+    --lr 1e-3 
+    --optimizer adamw 
+    --scheduler step
+    --save_dir checkpoints/resnet50_adamw
+```
+Run this command on your VScode Terminal to start with the training of individual models.
