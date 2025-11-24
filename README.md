@@ -1,4 +1,4 @@
-# 🛰️ EE782 – Assignment 2: Satellite Image Classification using Deep CNNs
+# 🛰️ EE782 – Satellite Image Classification using Deep CNNs
 
 ## 👨‍💻 Group Members
 This project was completed by:
