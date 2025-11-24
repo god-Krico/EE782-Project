@@ -70,6 +70,7 @@ conda activate pytorch_gpu
 # Install all necessary packages
 pip install torch torchvision timm matplotlib scikit-learn tqdm pillow tensorboard
 ```
+All the codes would also run if you do not have CUDA integration. It would instead use the CPU but would take longer to train.
 
 ### 2. Prepare the Dataset
 
@@ -93,3 +94,14 @@ python train.py
     --save_dir checkpoints/resnet50_adamw
 ```
 Run this command on your VScode Terminal to start with the training of individual models.
+
+### 4. Evaluating All 6 Models
+You simply need to run the **eval_models.py** to test all the models.
+```bash
+python eval_models.py
+```
+This generates:
+*Test accuracy for every model
+*Confusion matrices (confmat_<model>.png)
+*accuracies_bar.png
+*summary.txt
